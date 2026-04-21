@@ -137,3 +137,23 @@ dist
 # Vite logs files
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+
+# Python build + test artefacts (for adapters/)
+__pycache__/
+*.py[cod]
+*.egg-info/
+*.egg
+.pytest_cache/
+.tox/
+.nox/
+htmlcov/
+.coverage
+.coverage.*
+build/
+dist/
+*.whl
+*.tar.gz
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/

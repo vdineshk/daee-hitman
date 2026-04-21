@@ -1,0 +1,52 @@
+[build-system]
+requires = ["hatchling>=1.25"]
+build-backend = "hatchling.build"
+
+[project]
+name = "dominion-observatory-crewai"
+version = "0.1.0"
+description = "CrewAI event listener for the Dominion Observatory — report MCP tool behaviour from CrewAI crews and flows to the cross-ecosystem runtime trust layer."
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.10,<3.14"
+authors = [
+    { name = "Dominion Observatory", email = "hello@levylens.co" },
+]
+keywords = ["crewai", "mcp", "observability", "trust", "telemetry", "agent"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+dependencies = [
+    "dominion-observatory-sdk>=0.2.0",
+]
+
+[project.optional-dependencies]
+crewai = ["crewai>=1.0.0"]
+test = [
+    "pytest>=8.0",
+    "pytest-asyncio>=0.23",
+]
+
+[project.urls]
+Homepage = "https://dominion-observatory.sgdata.workers.dev"
+Repository = "https://github.com/vdineshk/daee-hitman"
+Issues = "https://github.com/vdineshk/daee-hitman/issues"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/dominion_observatory_crewai"]
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "src/dominion_observatory_crewai",
+    "README.md",
+    "LICENSE",
+]
