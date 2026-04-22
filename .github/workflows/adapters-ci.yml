@@ -43,3 +43,35 @@ jobs:
           pip install build
           python -m build
           ls -la dist/
+
+  autogen-adapter:
+    name: dominion-observatory-autogen (py${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install adapter + test deps
+        working-directory: adapters/dominion-observatory-autogen
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[test]"
+
+      - name: Run pytest
+        working-directory: adapters/dominion-observatory-autogen
+        run: pytest -v
+
+      - name: Build wheel + sdist
+        working-directory: adapters/dominion-observatory-autogen
+        run: |
+          pip install build
+          python -m build
+          ls -la dist/
