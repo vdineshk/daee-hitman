@@ -1,0 +1,64 @@
+{
+  "schema_version": "1.0.0",
+  "report_id": "week-17-2026",
+  "iso_week": {
+    "week": 17,
+    "year": 2026,
+    "start_date": "2026-04-20",
+    "end_date":   "2026-04-26"
+  },
+  "generated_at": "2026-04-26T12:34:00Z",
+  "observatory_version": "1.2.0",
+  "observation_window": {
+    "data_collection_started": "2026-04-08",
+    "report_window_days": 18
+  },
+  "ecosystem_metrics": {
+    "total_servers_tracked": 4584,
+    "total_interactions_recorded": 28904,
+    "interactions_last_24h": 2446,
+    "average_trust_score": 53.9,
+    "server_discovery_rate_per_day": 254.67
+  },
+  "external_demand_baseline": {
+    "external_interactions_total": 9,
+    "external_interactions_24h": 0,
+    "distinct_external_agents_total": 7,
+    "monetization_floor": {
+      "interactions": 10000,
+      "distinct_agents": 20
+    },
+    "phase": "DATA_ACCUMULATION",
+    "classification_rule": "external = (agent_id NOT IN ('observatory_probe','anonymous')) AND (tool_name NOT LIKE '_keeper%')"
+  },
+  "interaction_provenance": {
+    "observatory_probe_rows": 1210,
+    "flywheel_keeper_rows": 27588,
+    "anonymous_non_keeper_rows": 352,
+    "external_demand_rows": 9
+  },
+  "category_distribution": [
+    { "name": "other",         "servers": 1880, "share_pct": 41.01 },
+    { "name": "uncategorized", "servers": 729,  "share_pct": 15.90 },
+    { "name": "search",        "servers": 367,  "share_pct": 8.00  },
+    { "name": "code",          "servers": 317,  "share_pct": 6.91  },
+    { "name": "productivity",  "servers": 263,  "share_pct": 5.74  },
+    { "name": "finance",       "servers": 226,  "share_pct": 4.93  },
+    { "name": "data",          "servers": 208,  "share_pct": 4.54  },
+    { "name": "communication", "servers": 164,  "share_pct": 3.58  },
+    { "name": "media",         "servers": 113,  "share_pct": 2.46  },
+    { "name": "compliance",    "servers": 83,   "share_pct": 1.81  },
+    { "name": "education",     "servers": 67,   "share_pct": 1.46  },
+    { "name": "security",      "servers": 52,   "share_pct": 1.13  },
+    { "name": "weather",       "servers": 45,   "share_pct": 0.98  },
+    { "name": "transport",     "servers": 39,   "share_pct": 0.85  },
+    { "name": "health",        "servers": 26,   "share_pct": 0.57  },
+    { "name": "test",          "servers": 5,    "share_pct": 0.11  }
+  ],
+  "data_source": {
+    "api_stats_url":      "https://dominion-observatory.sgdata.workers.dev/api/stats",
+    "api_compliance_url": "https://dominion-observatory.sgdata.workers.dev/api/compliance?limit=200",
+    "fetched_at": "2026-04-26T12:33:49Z"
+  },
+  "license": "CC-BY-4.0"
+}
