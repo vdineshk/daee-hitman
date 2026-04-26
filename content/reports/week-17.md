@@ -2,14 +2,14 @@
 
 **ISO Week 17 of 2026** (Monday 2026-04-20 → Sunday 2026-04-26)
 
-**Status:** DRAFT — publishes Sunday 2026-04-27 via Strategist-deployed Observatory Worker route.
+**Status:** PUBLISHED 2026-04-26 (Sunday). Queued for deployment to stable URL via DISTRIBUTION_SIGNAL to Strategist (`signals/2026-04-24-DISTRIBUTION-SIGNAL-weekly-behavioral-report-week17-deploy.md`).
 
 **Data source:** Dominion Observatory runtime telemetry on 4,584 MCP servers.
 Anonymised six-field interaction records (agent_id, server_url, success, latency_ms, tool_name, http_status) — Singapore PDPA compliant, EU AI Act Article 12 compatible.
 
-**Verification timestamps (all curl UTC 2026-04-24):**
+**Verification timestamps:**
 
-- `/api/stats` → 200 @ 2026-04-24T12:36:00Z
+- `/api/stats` → 200 @ 2026-04-24T12:36:00Z (drafted) + re-verified 2026-04-26T20:00Z (published): external_demand=9, total_interactions=28,945
 - `/api/leaderboard?limit=20` → 200 @ 2026-04-24T12:37:58Z
 - `/api/trust?url=<server_url>` individual checks → 200 @ 2026-04-24T12:40Z–12:42Z
 - `/api/compliance?start_date=2026-04-15&limit=500` → 200 (1,000 rows)
@@ -22,11 +22,11 @@ Anonymised six-field interaction records (agent_id, server_url, success, latency
 | ------------------------------------------ | ------ |
 | total MCP servers tracked                  | 4,584  |
 | categories observed                        | 16     |
-| total interactions recorded (lifetime)     | 24,043 |
-| interactions last 24h                      | 2,448  |
+| total interactions recorded (lifetime)     | 28,945 |
+| interactions last 24h                      | 2,446  |
 | average trust score (all servers)          | 53.9   |
-| observatory probes (lifetime)              | 1,017  |
-| agent-reported interactions (lifetime)     | 23,241 |
+| observatory probes (lifetime)              | 1,211  |
+| agent-reported interactions (lifetime)     | 27,989 |
 
 **What does "trust score" mean?** It is a 0–100 composite of two independent signals: a **static_score** (registry metadata, declared categories, GitHub signal) and a **runtime_score** (actually-observed success rate, latency, uptime under Observatory probes + user-reported agent behaviour). The two can and do diverge. This week's report is about the *divergence*.
 
