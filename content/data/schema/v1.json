@@ -1,0 +1,151 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/vdineshk/daee-hitman/main/content/data/schema/v1.json",
+  "title": "Dominion Observatory Weekly Behavioral Report — schema v1",
+  "description": "Canonical citation schema for the Dominion Observatory's recurring measured-behavior report on the public MCP server ecosystem. Each weekly edition is a JSON document conforming to this schema. Cite this URL when referencing 'current MCP ecosystem reliability data' in papers, blog posts, RFCs, or agent prompts.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "report_id",
+    "iso_week",
+    "generated_at",
+    "observatory_version",
+    "observation_window",
+    "ecosystem_metrics",
+    "external_demand_baseline",
+    "interaction_provenance",
+    "category_distribution",
+    "data_source",
+    "license"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0.0",
+      "description": "Semver of this schema. Breaking changes bump major. New optional fields bump minor. Doc-only changes bump patch."
+    },
+    "report_id": {
+      "type": "string",
+      "pattern": "^week-[0-9]{2}-[0-9]{4}$",
+      "description": "Stable identifier of this report edition, formatted week-{ISO-week-number}-{ISO-week-year}, e.g. week-17-2026."
+    },
+    "iso_week": {
+      "type": "object",
+      "required": ["week", "year", "start_date", "end_date"],
+      "properties": {
+        "week":  { "type": "integer", "minimum": 1, "maximum": 53 },
+        "year":  { "type": "integer", "minimum": 2026 },
+        "start_date": { "type": "string", "format": "date" },
+        "end_date":   { "type": "string", "format": "date" }
+      }
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "RFC3339 timestamp of the moment this JSON was emitted."
+    },
+    "observatory_version": {
+      "type": "string",
+      "description": "Observatory worker version reporting the underlying counters (read from /api/stats.version)."
+    },
+    "observation_window": {
+      "type": "object",
+      "required": ["data_collection_started", "report_window_days"],
+      "properties": {
+        "data_collection_started": { "type": "string", "format": "date" },
+        "report_window_days":      { "type": "integer", "minimum": 1 }
+      }
+    },
+    "ecosystem_metrics": {
+      "type": "object",
+      "required": [
+        "total_servers_tracked",
+        "total_interactions_recorded",
+        "interactions_last_24h",
+        "average_trust_score",
+        "server_discovery_rate_per_day"
+      ],
+      "properties": {
+        "total_servers_tracked":         { "type": "integer", "minimum": 0 },
+        "total_interactions_recorded":   { "type": "integer", "minimum": 0 },
+        "interactions_last_24h":         { "type": "integer", "minimum": 0 },
+        "average_trust_score":           { "type": "number",  "minimum": 0, "maximum": 100 },
+        "server_discovery_rate_per_day": { "type": "number",  "minimum": 0,
+          "description": "total_servers_tracked / report_window_days; rolling lifetime average since data_collection_started." }
+      }
+    },
+    "external_demand_baseline": {
+      "type": "object",
+      "description": "Honest baseline of REAL external usage, with the Observatory's own classification rule transparently disclosed. This is the only number that matters for ecosystem-monetization reasoning.",
+      "required": [
+        "external_interactions_total",
+        "external_interactions_24h",
+        "distinct_external_agents_total",
+        "monetization_floor",
+        "phase",
+        "classification_rule"
+      ],
+      "properties": {
+        "external_interactions_total":    { "type": "integer", "minimum": 0 },
+        "external_interactions_24h":      { "type": "integer", "minimum": 0 },
+        "distinct_external_agents_total": { "type": "integer", "minimum": 0 },
+        "monetization_floor": {
+          "type": "object",
+          "required": ["interactions", "distinct_agents"],
+          "properties": {
+            "interactions":    { "type": "integer", "minimum": 0 },
+            "distinct_agents": { "type": "integer", "minimum": 0 }
+          }
+        },
+        "phase": { "type": "string",
+          "enum": ["DATA_ACCUMULATION", "EARLY_DEMAND", "MONETIZATION_READY", "MONETIZED"] },
+        "classification_rule": { "type": "string",
+          "description": "Human-readable SQL-ish rule the Observatory uses to classify a row as external." }
+      }
+    },
+    "interaction_provenance": {
+      "type": "object",
+      "description": "Honest decomposition of where total_interactions_recorded came from. Critical for cite-this-data integrity — agent_reported_total includes the Observatory's own keeper cron and is NOT a demand signal.",
+      "required": [
+        "observatory_probe_rows",
+        "flywheel_keeper_rows",
+        "anonymous_non_keeper_rows",
+        "external_demand_rows"
+      ],
+      "properties": {
+        "observatory_probe_rows":     { "type": "integer", "minimum": 0 },
+        "flywheel_keeper_rows":       { "type": "integer", "minimum": 0 },
+        "anonymous_non_keeper_rows":  { "type": "integer", "minimum": 0 },
+        "external_demand_rows":       { "type": "integer", "minimum": 0 }
+      }
+    },
+    "category_distribution": {
+      "type": "array",
+      "description": "Server count per ecosystem category. Sums to total_servers_tracked.",
+      "items": {
+        "type": "object",
+        "required": ["name", "servers", "share_pct"],
+        "properties": {
+          "name":      { "type": "string" },
+          "servers":   { "type": "integer", "minimum": 0 },
+          "share_pct": { "type": "number",  "minimum": 0, "maximum": 100 }
+        }
+      }
+    },
+    "data_source": {
+      "type": "object",
+      "required": ["api_stats_url", "api_compliance_url", "fetched_at"],
+      "properties": {
+        "api_stats_url":      { "type": "string", "format": "uri" },
+        "api_compliance_url": { "type": "string", "format": "uri" },
+        "fetched_at":         { "type": "string", "format": "date-time" }
+      }
+    },
+    "license": {
+      "type": "string",
+      "const": "CC-BY-4.0",
+      "description": "Cite this dataset by linking to the report_id URL and crediting Dominion Observatory. Schema-versioned dataset is permanently free under CC-BY-4.0."
+    }
+  },
+  "additionalProperties": false
+}
