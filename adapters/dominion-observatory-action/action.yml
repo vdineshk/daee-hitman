@@ -1,0 +1,97 @@
+name: 'Dominion Observatory MCP Compliance Check'
+description: >
+  Record your MCP server's behavioral compliance to Dominion Observatory and surface
+  its trust score in CI. Every run creates an immutable telemetry record that compounds
+  into Observatory's cross-ecosystem behavioral dataset.
+author: 'Dominion Agent Economy'
+
+branding:
+  icon: 'shield'
+  color: 'blue'
+
+inputs:
+  server_url:
+    description: >
+      MCP server URL to check (e.g. https://my-server.example.com/mcp or
+      stdio://path/to/server). Used as the stable identifier for this server
+      in Observatory's compliance ledger.
+    required: true
+
+  agent_id:
+    description: >
+      Unique identifier for the agent/workflow recording this check.
+      Defaults to github-action-{org}-{repo}. Use a stable value so Observatory
+      can track this server's history across CI runs.
+    required: false
+    default: ''
+
+  tool_name:
+    description: >
+      MCP tool name recorded in the compliance event (e.g. "list_resources",
+      "call_tool", "ci-compliance-check"). Purely for your telemetry labels.
+    required: false
+    default: 'ci-compliance-check'
+
+  record_success:
+    description: >
+      Whether to record the compliance check as a success (true) or failure
+      (false). Set to false to record a known failure event for diagnostic
+      purposes.
+    required: false
+    default: 'true'
+
+  fail_below_trust:
+    description: >
+      Exit 1 if Observatory's trust score for this server is below this value
+      (integer 0–100). Set to 0 to never fail on trust score. The trust score
+      reflects cumulative behavioral history across all agents — a single run
+      cannot immediately fail a server with a strong prior record.
+    required: false
+    default: '0'
+
+outputs:
+  trust_score:
+    description: >
+      Observatory behavioral trust score for the server (integer 0–100).
+      Reflects cumulative interaction history across all agents that have
+      reported this server.
+    value: ${{ steps.observatory.outputs.trust_score }}
+
+  compliance_count:
+    description: >
+      Total compliance interactions recorded for this server in Observatory's
+      public ledger at time of this run.
+    value: ${{ steps.observatory.outputs.compliance_count }}
+
+  compliance_pass_rate:
+    description: >
+      Pass rate as an integer percentage (0–100) across all recorded
+      interactions for this server.
+    value: ${{ steps.observatory.outputs.compliance_pass_rate }}
+
+  agent_id_used:
+    description: >
+      The agent_id that was recorded in Observatory for this CI run.
+      Useful for correlating CI runs against Observatory's /api/compliance data.
+    value: ${{ steps.observatory.outputs.agent_id_used }}
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Install Dominion Observatory SDK
+      shell: bash
+      run: |
+        pip install "dominion-observatory>=0.2.0" --quiet --disable-pip-version-check
+
+    - name: Record compliance and fetch trust score
+      id: observatory
+      shell: bash
+      env:
+        _OBS_SERVER_URL: ${{ inputs.server_url }}
+        _OBS_AGENT_ID: ${{ inputs.agent_id }}
+        _OBS_TOOL_NAME: ${{ inputs.tool_name }}
+        _OBS_RECORD_SUCCESS: ${{ inputs.record_success }}
+        _OBS_FAIL_BELOW: ${{ inputs.fail_below_trust }}
+        _OBS_REPO: ${{ github.repository }}
+        _OBS_ACTION_PATH: ${{ github.action_path }}
+      run: python3 "${_OBS_ACTION_PATH}/src/check.py"
