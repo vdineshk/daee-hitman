@@ -1,0 +1,239 @@
+{
+  "$schema": "https://raw.githubusercontent.com/vdineshk/daee-hitman/main/content/data/schema/v1.json",
+  "schema_version": "1.0.0",
+  "report_id": "mcp-behavioral-fingerprints-v1",
+  "document_type": "behavioral-fingerprint-baseline",
+  "version": "1.0",
+  "generated_at": "2026-04-28T10:00:00Z",
+  "observatory_version": "1.2.0",
+  "observation_window": {
+    "start": "2026-04-08T00:00:00Z",
+    "end": "2026-04-28T10:00:00Z",
+    "days": 20
+  },
+  "cite_as": "Dominion Observatory, 'MCP Server Behavioral Fingerprints v1.0,' 2026-04-28, https://github.com/vdineshk/daee-hitman/blob/main/content/reports/mcp-behavioral-fingerprints-v1.md",
+  "ecosystem_metrics": {
+    "total_servers_tracked": 4584,
+    "total_interactions_recorded": 35117,
+    "average_trust_score": 53.9,
+    "observatory_probes_total": 1454,
+    "agent_reported_total": 33976,
+    "observatory_probes_24h": 96,
+    "probe_frequency_per_hour": 4,
+    "probe_interval_minutes": 5
+  },
+  "behavioral_classes": {
+    "class_a_high_trust": {
+      "description": "High-trust behavioral profile — uncompromised, correctly-operating MCP server",
+      "trust_score_range": [90, 100],
+      "server_count": 8,
+      "baseline_metrics": {
+        "success_rate_min": 0.988,
+        "success_rate_max": 0.999,
+        "success_rate_typical": 0.993,
+        "latency_health_check_ms": {
+          "min": 4,
+          "max": 6,
+          "typical": 5
+        },
+        "latency_functional_ms": {
+          "min": 20,
+          "max": 58,
+          "typical": 34
+        },
+        "http_status_2xx_rate_min": 0.988,
+        "tool_call_distribution": {
+          "health_check_fraction": 0.98,
+          "functional_fraction": 0.02
+        },
+        "interactions_per_day_typical": 210
+      },
+      "acceptable_ranges": {
+        "success_rate_min": 0.97,
+        "latency_health_check_ms_max": 15,
+        "latency_functional_ms_max": 500,
+        "http_non2xx_rate_max": 0.03
+      },
+      "representative_servers": [
+        {
+          "url": "https://sg-cpf-calculator-mcp.sgdata.workers.dev/mcp",
+          "trust_score": 92.4,
+          "success_rate": 0.999,
+          "avg_latency_ms": 58,
+          "total_interactions": 4211,
+          "category": "data"
+        },
+        {
+          "url": "https://sg-workpass-compass-mcp.sgdata.workers.dev/mcp",
+          "trust_score": 92.4,
+          "success_rate": 0.999,
+          "avg_latency_ms": 56,
+          "total_interactions": 4210,
+          "category": "data"
+        },
+        {
+          "url": "https://sg-gst-calculator-mcp.sgdata.workers.dev/mcp",
+          "trust_score": 92.4,
+          "success_rate": 0.999,
+          "avg_latency_ms": 58,
+          "total_interactions": 4216,
+          "category": "finance"
+        },
+        {
+          "url": "https://sg-weather-data-mcp.sgdata.workers.dev/mcp",
+          "trust_score": 92.4,
+          "success_rate": 0.999,
+          "avg_latency_ms": 57,
+          "total_interactions": 4211,
+          "category": "data"
+        },
+        {
+          "url": "https://asean-trade-rules-mcp.sgdata.workers.dev/mcp",
+          "trust_score": 92.2,
+          "success_rate": 0.995,
+          "avg_latency_ms": 31,
+          "total_interactions": 4194,
+          "category": "data"
+        },
+        {
+          "url": "https://sg-regulatory-data-mcp.sgdata.workers.dev/mcp",
+          "trust_score": 92.1,
+          "success_rate": 0.993,
+          "avg_latency_ms": 33,
+          "total_interactions": 4213,
+          "category": "data"
+        },
+        {
+          "url": "https://sg-finance-data-mcp.sgdata.workers.dev/mcp",
+          "trust_score": 92.1,
+          "success_rate": 0.993,
+          "avg_latency_ms": 20,
+          "total_interactions": 4206,
+          "category": "finance"
+        },
+        {
+          "url": "https://sg-company-lookup-mcp.sgdata.workers.dev/mcp",
+          "trust_score": 91.9,
+          "success_rate": 0.988,
+          "avg_latency_ms": 34,
+          "total_interactions": 4195,
+          "category": "data"
+        }
+      ]
+    },
+    "class_b_degraded": {
+      "description": "Degraded behavioral profile — potential infrastructure issues or configuration drift, not necessarily compromise",
+      "trust_score_range": [50, 89],
+      "behavioral_markers": {
+        "success_rate": [0.85, 0.97],
+        "latency_multiplier_vs_baseline": [1.5, 3.0],
+        "http_non2xx_rate": [0.03, 0.10],
+        "pattern": "intermittent_degradation_with_recovery"
+      },
+      "worm_relevance": "Class B alone is insufficient as IoC. Transition from Class A to Class B combined with new tool_names or authentication pattern changes is the compound detection signal."
+    },
+    "class_c_compromised_indicative": {
+      "description": "Compromised-indicative behavioral profile — requires immediate investigation",
+      "trust_score_range": [0, 49],
+      "reference_case": {
+        "url": "https://mcp.byteray.ai/mcp",
+        "success_rate": 0.0,
+        "http_status_distribution": {"401": 1.0},
+        "avg_latency_ms": 31.8,
+        "pattern": "sudden_complete_auth_failure",
+        "notes": "Consistent 401 across all probe types. Server is responding (non-zero latency) but rejecting all authentication. Indicative of: server replacement with new auth requirements, intentional probe-blocking, or credential rotation."
+      },
+      "discrimination_rule": "Sudden 100% auth failure (likely replacement/takeover) vs gradual increase (credential rotation). Cross-reference with prior 7-day auth success rate."
+    }
+  },
+  "ioc_indicators": [
+    {
+      "id": "IOC-MCP-001",
+      "name": "Success Rate Collapse",
+      "signal": "success_rate drops > 10% within a 2-hour window vs 7-day rolling average",
+      "threshold": "< 89% success rate for any server previously in Class A",
+      "measurement_window": "2h",
+      "reference_window": "7d rolling average",
+      "false_positive_rate": "low",
+      "worm_mechanism": "Compromised server returning injected responses may have elevated error rates as injected content causes downstream failures",
+      "sigma_rule_placeholder": "detection: keywords: [success_rate_collapse, mcp_server] condition: success_rate < 0.89 AND prior_7d_avg > 0.97"
+    },
+    {
+      "id": "IOC-MCP-002",
+      "name": "Latency Bifurcation",
+      "signal": "functional_call_latency > 5x health_check_latency baseline for >= 5 consecutive probes",
+      "threshold_ms": 290,
+      "baseline_health_check_ms": 5,
+      "baseline_functional_ms": 34,
+      "alert_functional_ms": 290,
+      "consecutive_probes": 5,
+      "worm_mechanism": "Server processing injected payloads incurs overhead on functional calls but not health checks (which bypass business logic)",
+      "note": "290ms derived from 5 × 58ms (max healthy functional latency in dataset)"
+    },
+    {
+      "id": "IOC-MCP-003",
+      "name": "New Tool_Name Emergence",
+      "signal": "Any tool_name appearing in probe responses absent from server's prior 7-day call history",
+      "threshold": "1 new tool_name not in prior 168h vocabulary",
+      "measurement_window": "168h rolling vocabulary",
+      "worm_mechanism": "Compromised server may expose new tool surfaces as part of attack payload — new attack vectors presented as new tools",
+      "implementation": "Maintain rolling 7d tool_name vocabulary per server_url; alert on first occurrence of new entries"
+    },
+    {
+      "id": "IOC-MCP-004",
+      "name": "Authentication Pattern Transition",
+      "signal": "Sudden shift from predominantly 2xx to predominantly 4xx responses, especially 401",
+      "threshold": "> 80% 401 rate in a 1-hour window for a server previously in Class A",
+      "measurement_window": "1h",
+      "worm_mechanism": "Server replacement (malicious endpoint substitution) changes authentication requirements suddenly",
+      "discrimination": "Sudden 100% 401 = server replaced; gradual increase = credential rotation"
+    },
+    {
+      "id": "IOC-MCP-005",
+      "name": "Interaction Density Anomaly",
+      "signal": "Observatory interaction count drops > 50% or increases > 200% vs 7-day rolling average",
+      "threshold_drop_pct": 50,
+      "threshold_increase_pct": 200,
+      "reference_window": "7d rolling average",
+      "worm_mechanism": "Unexpected density change may indicate server redirection (traffic silently rerouted to malicious endpoint) or probe-blocking activation"
+    }
+  ],
+  "threat_research_mapping": [
+    {
+      "research": "ClawWorm (2026)",
+      "contribution": "First production MCP worm attack documented",
+      "relationship": "This dataset provides behavioral baseline against which ClawWorm-style changes can be detected. Attack prior art; detection tool."
+    },
+    {
+      "research": "Cisco AI Security Framework (2026)",
+      "contribution": "14-type MCP threat taxonomy",
+      "relationship": "Classification framework. This dataset provides behavioral detection signals for the malware categories."
+    },
+    {
+      "research": "MITRE ATT&CK ATLAS",
+      "contribution": "AI/ML adversarial technique framework",
+      "relationship": "IOC-MCP-001 through IOC-MCP-005 are candidates for new ATLAS technique documentation for MCP-specific attacks."
+    },
+    {
+      "research": "NIS2 Article 21 (Q3 2026)",
+      "contribution": "EU AI system security measures requirement",
+      "relationship": "This dataset provides the behavioral evidence layer for NIS2 Article 21 compliance audits of MCP server dependencies."
+    }
+  ],
+  "data_source": {
+    "provider": "Dominion Observatory",
+    "api": "https://dominion-observatory.sgdata.workers.dev",
+    "endpoints_used": ["/api/stats", "/api/compliance", "/api/leaderboard"],
+    "probe_agent_id": "observatory_probe",
+    "collection_method": "autonomous probe",
+    "pdpa_compliant": true,
+    "imda_compliant": true,
+    "anonymized": true
+  },
+  "license": "MIT",
+  "limitations": [
+    "8 deeply-profiled servers in v1.0 represent small fraction of 4,584 tracked servers",
+    "Probe-only baseline; real agent traffic may produce different signatures",
+    "IoC thresholds theoretically derived; calibration against confirmed compromise cases pending"
+  ]
+}
